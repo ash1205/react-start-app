@@ -1,8 +1,8 @@
 import './App.css';
 import React from 'react';
-import Counter from './counterComponent';
-import SearchForm from './searchFormComponent';
-import GenreSelect from './genreSelectComponent';
+import Counter from './components/Counter';
+import SearchForm from './components/SearchForm';
+import GenreSelect from './components/GenreSelect';
 
 function App() {
   const handleSearch = (query) => {
@@ -22,7 +22,7 @@ function App() {
       <SearchForm initialSearchQuery={initialSearchQuery} onSearch={handleSearch} />
       <GenreSelect
         genres={genres}
-        selectedGenre="Action" // Replace with your initially selected genre
+        selectedGenre="Action" 
         onSelect={handleGenreSelect}
       />
     </div>
