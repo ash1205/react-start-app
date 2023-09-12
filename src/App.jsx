@@ -18,6 +18,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>React IMDB App</h1>
       <Counter initialValue={0} />
       <SearchForm initialSearchQuery={initialSearchQuery} onSearch={handleSearch} />
       <GenreSelect
