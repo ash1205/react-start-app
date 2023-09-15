@@ -1,32 +1,19 @@
-import './App.css';
-import React from 'react';
-import Counter from './components/Counter';
-import SearchForm from './components/SearchForm';
-import GenreSelect from './components/GenreSelect';
+import "./App.css";
+import React from "react";
+import SearchForm from "./components/SearchForm";
+import Header from "./components/Header";
+import { Container } from "react-bootstrap";
+import MovieList from "./components/MovieList";
 
 function App() {
-  const handleSearch = (query) => {
-    console.log(`Search query: ${query}`);
-  };
-
-  const handleGenreSelect = (genre) => {
-    console.log(`Selected genre: ${genre}`);
-  };
-
-  const genres = ['Action', 'Comedy', 'Drama', 'Science Fiction', 'Thriller'];
-  const initialSearchQuery = 'Your initial search query';
-
   return (
-    <div className="App">
-      <h1>React IMDB App</h1>
-      <Counter initialValue={0} />
-      <SearchForm initialSearchQuery={initialSearchQuery} onSearch={handleSearch} />
-      <GenreSelect
-        genres={genres}
-        selectedGenre="Action" 
-        onSelect={handleGenreSelect}
-      />
-    </div>
+    <>
+      <Header />
+      <Container className=" p-4">
+        <SearchForm />
+        <MovieList />
+      </Container>
+    </>
   );
 }
 

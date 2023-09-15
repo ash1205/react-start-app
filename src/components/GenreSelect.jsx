@@ -1,17 +1,31 @@
 import React from 'react';
+import { useState } from 'react';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ToggleButton from 'react-bootstrap/ToggleButton';
+
+
 
 function GenreSelect({ genres, selectedGenre, onSelect }) {
+  const [radioValue, setRadioValue] = useState('1');
+
     return (
       <div>
-        {genres.map((genre) => (
-          <button
-            key={genre}
-            onClick={() => onSelect(genre)}
-            className={genre === selectedGenre ? 'selected' : ''}
+      <ButtonGroup>
+        {genres.map((genre, idx) => (
+          <ToggleButton
+            key={idx}
+            id={`radio-${idx}`}
+            type="radio"
+            variant={genre.variant}
+            name="radio"
+            value={genre.value}
+            checked={radioValue === genre.value}
+            //onChange={(event) => setRadioValue(event.currentTarget.value)}
           >
-            {genre}
-          </button>
+            {genre.name}
+          </ToggleButton>
         ))}
+      </ButtonGroup>
       </div>
     );
   }
