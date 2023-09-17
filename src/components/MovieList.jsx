@@ -10,7 +10,7 @@ export default function MovieList() {
           <Card.Img src={movie.poster} variant="top" alt="..." />
           <Card.Body>
             <Card.Title>{movie.name}</Card.Title>
-            <Card.Text>Coming soon...</Card.Text>
+            <Card.Text>{movie.genre}</Card.Text>
             <Button variant="primary">Book now</Button>
           </Card.Body>
         </Card>
