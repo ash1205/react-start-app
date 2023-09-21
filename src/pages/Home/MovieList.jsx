@@ -1,12 +1,11 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
-import { movies } from "../lib/constants";
 
-export default function MovieList() {
+export default function MovieList({ movies }) {
   return (
     <div className="d-flex flex-row gap-4 flex-wrap">
-      {movies.map((movie) => (
-        <Card style={{ width: "15rem" }}>
+      {movies.map((movie, idx) => (
+        <Card style={{ width: "15rem" }} key={idx}>
           <Card.Img src={movie.poster} variant="top" alt="..." />
           <Card.Body>
             <Card.Title>{movie.name}</Card.Title>

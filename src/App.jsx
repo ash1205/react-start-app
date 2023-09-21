@@ -1,20 +1,9 @@
 import "./App.css";
 import React from "react";
-import SearchForm from "./components/SearchForm";
-import Header from "./components/Header";
-import { Container } from "react-bootstrap";
-import MovieList from "./components/MovieList";
+import AppRoutes from "./AppRoutes";
 
 function App() {
-  return (
-    <>
-      <Header />
-      <Container className=" p-4">
-        <SearchForm />
-        <MovieList />
-      </Container>
-    </>
-  );
+  return <AppRoutes />;
 }
 
 export default App;

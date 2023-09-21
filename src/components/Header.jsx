@@ -2,6 +2,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -12,19 +13,25 @@ export default function Header() {
       data-bs-theme="dark"
     >
       <Container>
-        <Navbar.Brand href="#home">Movies App</Navbar.Brand>
+        <Link to="/" className="navbar-brand">
+          Movies App
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Browse</Nav.Link>
-            <Nav.Link href="#link">Tickets</Nav.Link>
+            <Link to="/browse" className="nav-link">
+              Browse
+            </Link>
+            <Link to="/tickets" className="nav-link">
+              Tickets
+            </Link>
             <NavDropdown title="Live shows" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">
+              <Link to="/shows" className="dropdown-item">
                 Musical shows
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              </Link>
+              <Link to="/shows" className="dropdown-item">
                 Standup comedy
-              </NavDropdown.Item>
+              </Link>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>
