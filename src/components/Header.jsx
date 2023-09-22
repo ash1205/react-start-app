@@ -36,8 +36,12 @@ export default function Header() {
           </Nav>
         </Navbar.Collapse>
         <div className="d-flex gap-2">
-          <button className="btn btn-primary mr-4">Register</button>
-          <button className="btn btn-light">Login</button>
+          <Link to="/signup" className="btn btn-primary mr-4">
+            Register
+          </Link>
+          <Link to="/login" className="btn btn-light">
+            Login
+          </Link>
         </div>
       </Container>
     </Navbar>
