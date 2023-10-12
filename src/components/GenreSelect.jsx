@@ -1,16 +1,17 @@
-import React from 'react';
-import { useState } from 'react';
-import { allGenres } from '../lib/constants';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ToggleButton from 'react-bootstrap/ToggleButton';
+import React from "react";
+import { useState } from "react";
 
+import ButtonGroup from "react-bootstrap/ButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton";
 
+import PropTypes from "prop-types";
 
-function GenreSelect({ genres, selectedGenre, onSelect }) {
-  const [genreValue, setGenreValue] = useState('1');
+function GenreSelect(props) {
+  const { allGenres } = props;
+  const [genreValue, setGenreValue] = useState("1");
 
-    return (
-      <div>
+  return (
+    <div>
       <ButtonGroup>
         {allGenres.map((genre, idx) => (
           <ToggleButton
@@ -27,8 +28,18 @@ function GenreSelect({ genres, selectedGenre, onSelect }) {
           </ToggleButton>
         ))}
       </ButtonGroup>
-      </div>
-    );
-  }
+    </div>
+  );
+}
+
+GenreSelect.propTypes = {
+  allGenres: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string,
+      value: PropTypes.string,
+      variant: PropTypes.string,
+    })
+  )
+};
 
 export default GenreSelect;
