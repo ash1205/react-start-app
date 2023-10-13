@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchForm from "./SearchForm";
 import MovieList from "./MovieList";
 import { allMovies } from "../../lib/constants";
+import { listOfGenres } from "../../lib/constants";
 import GenreSelect from "../../components/GenreSelect";
 import Counter from "../../components/Counter";
 
@@ -18,7 +19,7 @@ export default function Home() {
   return (
     <>
       <SearchForm handleSearch={handleSearch} />
-      <GenreSelect></GenreSelect>
+      <GenreSelect allGenres={listOfGenres}></GenreSelect>
       <Counter></Counter>
       <MovieList movies={movies} />
     </>
