@@ -71,7 +71,7 @@ export const allMovies = [
   },
 ];
 
-export const allGenres = [
+export const listOfGenres = [
   { name: "Action", value: "1", variant: "outline-primary" },
   { name: "Comedy", value: "2", variant: "outline-warning" },
   { name: "Drama", value: "3", variant: "outline-danger" },

@@ -2,7 +2,11 @@ import React from "react";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 
+import PropTypes from "prop-types";
+
 function Counter(props) {
+  const { counterWidth, counterHeight } = props;
+
   const [value, setValue] = useState(0);
 
   const handleIncrement = () => {
@@ -13,15 +17,32 @@ function Counter(props) {
     if (value > 0) setValue(value - 1);
   };
 
+  const counterWidthMap = {
+    small: "5px",
+    medium: "35px",
+    large: "50px",
+  };
+
+  const counterHeightMap = {
+    small: "5px",
+    medium: "35px",
+    large: "50px",
+  };
+
   return (
     <div>
       <Button
         variant="danger"
-        size="sm"
-        style={{ marginRight: "10px" }}
+        size="1"
+        style={{
+          marginRight: "10px",
+          width: counterWidthMap[counterWidth],
+          height: counterHeightMap[counterHeight],
+          textAlign: "center",
+        }}
         onClick={() => handleDecrement()}
       >
-        +
+        -
       </Button>
       <input
         type="text"
@@ -29,15 +50,23 @@ function Counter(props) {
         style={{
           fontSize: "12px",
           padding: "2px",
-          marginTop: "15px",
+          marginTop: "25px",
           marginBottom: "15px",
+          width: counterWidthMap[counterWidth],
+          height: counterHeightMap[counterHeight],
+          textAlign: "center",
         }}
         placeholder={value}
       />
       <Button
         variant="success"
-        size="sm"
-        style={{ marginLeft: "10px" }}
+        size="1"
+        style={{
+          marginLeft: "10px",
+          width: counterWidthMap[counterWidth],
+          height: counterHeightMap[counterHeight],
+          textAlign: "center",
+        }}
         onClick={() => handleIncrement()}
       >
         +
@@ -45,5 +74,12 @@ function Counter(props) {
     </div>
   );
 }
+
+Counter.propTypes = {
+  counterWidth: PropTypes.oneOf(["small", "medium", "large"]),
+  counterHeight: PropTypes.oneOf(["small", "medium", "large"]),
+  handleIncrement: PropTypes.func,
+  handleDecrement: PropTypes.func,
+};
 
 export default Counter;

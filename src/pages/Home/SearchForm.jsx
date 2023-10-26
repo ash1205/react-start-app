@@ -16,7 +16,7 @@ function SearchForm(props) {
       <input
         type="text"
         className="form-control h-25 p-3"
-        placeholder={inputValue}
+        placeholder={"Search for Movies ..."}
         onChange={handleInputChange}
       />
       <button className="btn btn-primary" onClick={handleSearch}>
