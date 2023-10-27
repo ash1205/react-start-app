@@ -30,7 +30,7 @@ function Counter(props) {
   };
 
   return (
-    <div>
+    <div className="w-25">
       <Button
         variant="danger"
         size="1"
@@ -45,6 +45,7 @@ function Counter(props) {
         -
       </Button>
       <input
+        className="form-control d-inline w-25"
         type="text"
         size="1"
         style={{

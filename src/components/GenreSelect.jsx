@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from "react";
 
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
@@ -8,7 +7,10 @@ import PropTypes from "prop-types";
 
 function GenreSelect(props) {
   const { allGenres } = props;
-  const [genreValue, setGenreValue] = useState("1");
+
+  const handleOptionChange = (event) => {
+    props.handleGenreChanges(event.target.value);
+  };
 
   return (
     <div>
@@ -20,9 +22,8 @@ function GenreSelect(props) {
             type="radio"
             variant={genre.variant}
             name="genre"
-            value={genre.value}
-            checked={genreValue === genre.value}
-            onChange={(event) => setGenreValue(event.currentTarget.value)}
+            value={genre.name}
+            onChange={handleOptionChange}
           >
             {genre.name}
           </ToggleButton>
