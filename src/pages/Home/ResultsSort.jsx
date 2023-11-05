@@ -24,10 +24,13 @@ export default function ResultsSort(props) {
 
   return (
     <Form.Select
-      className={`form-select ${sortFieldWidthMap[sortFieldWidth]} ${sortFieldHeightMap[sortFieldHeight]} mb-3`}
       id="dropdown-basic-button"
       title="SortBy"
       onChange={handleSelectChange}
+      style={{
+        width: "150px",
+        marginRight: "10px",
+      }}
     >
       <option value="title">Title</option>
       <option value="vote_count">Vote Count</option>

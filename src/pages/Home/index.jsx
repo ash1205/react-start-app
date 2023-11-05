@@ -91,19 +91,26 @@ export default function Home() {
         >
           <SearchForm handleSearch={handleSearch} />
         </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-          }}
-        >
-          <GenreSelect
-            allGenres={listOfGenres}
-            handleGenreChanges={handleGenreChanges}
-          ></GenreSelect>
-          <ResultsSort handleSort={handleSort} />
-        </div>
+      </div>
+      <div
+        style={{
+          backgroundColor: "#888888",
+          width: "1280px",
+          height: "10px",
+        }}
+      ></div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <GenreSelect
+          allGenres={listOfGenres}
+          handleGenreChanges={handleGenreChanges}
+        ></GenreSelect>
+        <ResultsSort handleSort={handleSort} />
       </div>
       <MovieList movies={movies} />
     </>
