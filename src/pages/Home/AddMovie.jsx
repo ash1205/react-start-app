@@ -2,11 +2,11 @@ import { useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { listOfGenres } from "../../lib/constants";
 
 function AddMovie() {
   const [show, setShow] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const genres = ["Drama", "Action", "Comedy"];
   const [startDate, setStartDate] = useState(null);
 
   const handleDateChange = (date) => {
@@ -24,6 +24,39 @@ function AddMovie() {
     }
   };
 
+  const addMovie = () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      title: "La La Land",
+      tagline: "Here's to the fools who dream.",
+      vote_average: 7.9,
+      vote_count: 6782,
+      release_date: "2016-12-29",
+      poster_path:
+        "https://image.tmdb.org/t/p/w500/ylXCdC106IKiarftHkcacasaAcb.jpg",
+      overview:
+        "Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.",
+      budget: 30000000,
+      revenue: 445435700,
+      runtime: 128,
+      genres: ["Comedy", "Drama", "Romance"],
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+    fetch("http://localhost:4000/movies", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <div className={`input-group mb-3 mt-3`}>
       <Button
@@ -37,12 +70,12 @@ function AddMovie() {
         + ADD MOVIE
       </Button>
 
-      <Modal size="lg" show={show} onHide={handleClose}>
+      <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
         <Modal.Header
           closeButton
           style={{
-            background: "#232323",
-            color: "#FFFFFF",
+            fontSize: "12px",
+            height: "50px",
           }}
         >
           <Modal.Title>ADD MOVIE</Modal.Title>
@@ -56,73 +89,72 @@ function AddMovie() {
           <Form>
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Group className="mb-3" controlId="formMovieTitle">
                   <Form.Label>TITLE</Form.Label>
-                  <Form.Control
-                    placeholder="Tile"
-                    style={{
-                      background: "#323232",
-                    }}
-                  />
+                  <Form.Control placeholder="Tile" />
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Group className="mb-3" controlId="formMovieReleaseDate">
                   <Form.Label>RELEASE DATE</Form.Label>
-                  <DatePicker
-                    className="form-control"
-                    selected={startDate} // Use a state variable to manage the selected date
-                    onChange={handleDateChange} // Define a function to handle date changes
-                    dateFormat="MM/dd/yyyy" // You can customize the date format
-                    isClearable // Add a clear button
-                    placeholderText="Select Date"
-                    style={{
-                      background: "#323232",
-                    }}
-                  />
+                  <div style={{ width: "300%" }}>
+                    <DatePicker
+                      className="form-control"
+                      selected={startDate}
+                      onChange={handleDateChange}
+                      dateFormat="MM/dd/yyyy"
+                      isClearable
+                      placeholderText="Select Date"
+                    />
+                  </div>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Group className="mb-3" controlId="formMovieURL">
                   <Form.Label>MOVIE URL</Form.Label>
-                  <Form.Control
-                    placeholder="https://"
-                    style={{
-                      background: "#323232",
-                    }}
-                  />
+                  <Form.Control placeholder="https://" />
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Group className="mb-3" controlId="formMovieRating">
                   <Form.Label>RATING</Form.Label>
-                  <Form.Control
-                    placeholder="7.8"
-                    style={{
-                      background: "#323232",
-                    }}
-                  />
+                  <Form.Control placeholder="7.8" />
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formGroupGenres">
+                <Form.Group className="mb-3" controlId="formMovieGenres">
                   <Form.Label>GENRE</Form.Label>
                   <Dropdown>
-                    <Dropdown.Toggle variant="secondary" id="genre-dropdown">
+                    <Dropdown.Toggle
+                      variant="secondary"
+                      id="genre-dropdown"
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        paddingRight: "20px",
+                        backgroundColor: "white",
+                        color: "black",
+                      }}
+                    >
                       Select Genre
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {genres.map((genre) => (
+                    <Dropdown.Menu
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      {listOfGenres.map((genre) => (
                         <Form.Check
-                          key={genre}
+                          key={genre.value}
                           type="checkbox"
-                          label={genre}
-                          checked={selectedGenres.includes(genre)}
-                          onChange={() => handleGenreChange(genre)}
+                          label={genre.name}
+                          checked={selectedGenres.includes(genre.value)}
+                          onChange={() => handleGenreChange(genre.value)}
                         />
                       ))}
                     </Dropdown.Menu>
@@ -130,28 +162,20 @@ function AddMovie() {
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Group className="mb-3" controlId="formMovieRunTime">
                   <Form.Label>RUNTIME</Form.Label>
-                  <Form.Control
-                    placeholder="minutes"
-                    style={{
-                      background: "#323232",
-                    }}
-                  />
+                  <Form.Control placeholder="minutes" />
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formGroupEmail">
+                <Form.Group className="mb-3" controlId="formMovieOverview">
                   <Form.Label>OVERVIEW</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={5}
                     placeholder="Movie description"
-                    style={{
-                      background: "#323232",
-                    }}
                   />
                 </Form.Group>
               </Col>
@@ -167,7 +191,7 @@ function AddMovie() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={addMovie}>
             Save Changes
           </Button>
         </Modal.Footer>

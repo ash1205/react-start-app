@@ -1,22 +1,198 @@
-import React, { useState, useRef } from "react";
-import { Button, Card, Dropdown } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Card, Modal, Form, Row, Col, Dropdown } from "react-bootstrap";
+
+import { listOfGenres } from "../../lib/constants";
+
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import threeDotsIcon from "../../MovieEdit.png";
 
 export default function MovieList({ movies }) {
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
-  const dropdownRef = useRef(null);
+  const [modalInfo] = useState({ show: false, movieIndex: 0 });
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
 
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-    if (dropdownRef.current) {
-      const rect = dropdownRef.current.getBoundingClientRect();
-      setMenuPosition({
-        top: rect.top + window.scrollY,
-        left: rect.left + window.scrollX,
-      });
+  const [show, setShow] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const handleClose = () => setShow(false);
+
+  const openModal = (movie, position) => {
+    if (showModal) {
+      closeModal();
     }
+    setSelectedMovie(movie);
+    setModalPosition(position);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedMovie(null);
+    setShowModal(false);
+  };
+
+  const handleDateChange = (date) => {
+    setStartDate(date);
+  };
+
+  const handleGenreChange = (genre) => {
+    if (selectedGenres.includes(genre)) {
+      setSelectedGenres(selectedGenres.filter((g) => g !== genre));
+    } else {
+      setSelectedGenres([...selectedGenres, genre]);
+    }
+  };
+
+  const getModalContent = () => {
+    const movie = movies[modalInfo.movieIndex];
+    const handleShow = () => setShow(true);
+
+    return (
+      <div>
+        <Dropdown.Item eventKey="1" onClick={handleShow}>
+          Edit
+        </Dropdown.Item>
+        <Dropdown.Item eventKey="2">Delete</Dropdown.Item>
+
+        <Modal size="lg" show={show} onHide={handleClose} backdrop="static">
+          <Modal.Header
+            closeButton
+            style={{
+              fontSize: "12px",
+              height: "50px",
+            }}
+          >
+            <Modal.Title>EDIT MOVIE</Modal.Title>
+          </Modal.Header>
+          <Modal.Body
+            style={{
+              background: "black",
+              color: "#F65261",
+            }}
+          >
+            <Form>
+              <Row>
+                <Col xs={7}>
+                  <Form.Group className="mb-3" controlId="formGroupEmail">
+                    <Form.Label>TITLE</Form.Label>
+                    <Form.Control placeholder="Tile" value={movie.title} />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formGroupPassword">
+                    <Form.Label>RELEASE DATE</Form.Label>
+                    <DatePicker
+                      className="form-control"
+                      selected={startDate}
+                      onChange={handleDateChange}
+                      dateFormat="MM/dd/yyyy"
+                      isClearable
+                      placeholderText="Select Date"
+                      value={movie.release_date}
+                      style={{
+                        background: "#323232",
+                      }}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={7}>
+                  <Form.Group className="mb-3" controlId="formGroupEmail">
+                    <Form.Label>MOVIE URL</Form.Label>
+                    <Form.Control
+                      placeholder="https://"
+                      value={movie.poster_path}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formGroupPassword">
+                    <Form.Label>RATING</Form.Label>
+                    <Form.Control
+                      placeholder="7.8"
+                      value={movie.vote_average}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col xs={7}>
+                  <Form.Group className="mb-3" controlId="formMovieGenres">
+                    <Form.Label>GENRE</Form.Label>
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="secondary"
+                        id="genre-dropdown"
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          paddingRight: "20px",
+                          backgroundColor: "white",
+                          color: "black",
+                        }}
+                      >
+                        Select Genre
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        {listOfGenres.map((genre) => (
+                          <Form.Check
+                            key={genre.value}
+                            type="checkbox"
+                            label={genre.name}
+                            checked={selectedGenres.includes(genre.value)}
+                            onChange={() => handleGenreChange(genre.value)}
+                          />
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formGroupPassword">
+                    <Form.Label>RUNTIME</Form.Label>
+                    <Form.Control placeholder="minutes" value={movie.runtime} />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group className="mb-3" controlId="formGroupEmail">
+                    <Form.Label>OVERVIEW</Form.Label>
+                    <Form.Control
+                      as="textarea"
+                      rows={5}
+                      placeholder="Movie description"
+                      value={movie.overview}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+            </Form>
+          </Modal.Body>
+          <Modal.Footer
+            style={{
+              background: "#232323",
+              color: "#FFFFFF",
+            }}
+          >
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
   };
 
   return (
@@ -25,13 +201,8 @@ export default function MovieList({ movies }) {
         <Card style={{ width: "14rem", position: "relative" }} key={idx}>
           <div className="position-relative">
             <Card.Img src={movie.poster_path} variant="top" alt="..." />
-
-            {/* Small three dots image (clickable) */}
-            <img
-              src={threeDotsIcon}
-              alt="Three Dots"
+            <div
               className="three-dots-icon"
-              onClick={toggleMenu}
               style={{
                 position: "absolute",
                 top: "8%",
@@ -39,40 +210,10 @@ export default function MovieList({ movies }) {
                 transform: "translate(-50%, -50%)",
                 cursor: "pointer",
               }}
-            />
-
-            {/* Custom dropdown menu */}
-            {isMenuOpen && (
-              <div
-                className="custom-dropdown-menu"
-                style={{
-                  top: menuPosition.top + "px",
-                  left: menuPosition.left + "px",
-                  zIndex: 1000, // Ensure it's above the card
-                }}
-              >
-                <Dropdown
-                  show={true}
-                  ref={dropdownRef}
-                  style={{
-                    display: "block",
-                  }}
-                >
-                  <Dropdown.Toggle
-                    variant="light"
-                    id="custom-dropdown-toggle"
-                    style={{ display: "none" }}
-                  >
-                    <i className="fas fa-ellipsis-h"></i>
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item>Action</Dropdown.Item>
-                    <Dropdown.Item>Another action</Dropdown.Item>
-                    <Dropdown.Item>Something else</Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            )}
+              onClick={(e) => openModal(movie, { x: e.clientX, y: e.clientY })}
+            >
+              <img src={threeDotsIcon} alt="Three Dots" />
+            </div>
           </div>
           <Card.Body>
             <Card.Title>{movie.title}</Card.Title>
@@ -82,6 +223,29 @@ export default function MovieList({ movies }) {
           </Card.Body>
         </Card>
       ))}
+
+      <Modal
+        backdrop="static"
+        show={showModal}
+        onHide={closeModal}
+        style={{
+          position: "absolute",
+          left: modalPosition.x + "px",
+          top: modalPosition.y + "px",
+          width: "10rem",
+        }}
+      >
+        {selectedMovie && (
+          <Modal.Header
+            closeButton
+            style={{
+              fontSize: "8px",
+              height: "1rem",
+            }}
+          ></Modal.Header>
+        )}
+        <Modal.Body>{selectedMovie && getModalContent()}</Modal.Body>
+      </Modal>
     </div>
   );
 }
