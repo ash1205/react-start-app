@@ -4,6 +4,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { listOfGenres } from "../../lib/constants";
 
+import calandarIcon from "../../CalendarIcon.png";
+import MyDatePicker from "./MyDatePicker";
+
 function AddMovie() {
   const [show, setShow] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState([]);
@@ -97,15 +100,10 @@ function AddMovie() {
               <Col>
                 <Form.Group className="mb-3" controlId="formMovieReleaseDate">
                   <Form.Label>RELEASE DATE</Form.Label>
-                  <div style={{ width: "300%" }}>
-                    <DatePicker
-                      className="form-control"
-                      selected={startDate}
-                      onChange={handleDateChange}
-                      dateFormat="MM/dd/yyyy"
-                      isClearable
-                      placeholderText="Select Date"
-                    />
+                  <div style={{ position: "relative", width: "200px" }}>
+                    <MyDatePicker
+                      style={{ position: "relative", width: "500px" }}
+                    ></MyDatePicker>
                   </div>
                 </Form.Group>
               </Col>
@@ -150,11 +148,15 @@ function AddMovie() {
                     >
                       {listOfGenres.map((genre) => (
                         <Form.Check
+                          aria-label="option 1"
                           key={genre.value}
                           type="checkbox"
                           label={genre.name}
                           checked={selectedGenres.includes(genre.value)}
                           onChange={() => handleGenreChange(genre.value)}
+                          style={{
+                            marginLeft: "10px",
+                          }}
                         />
                       ))}
                     </Dropdown.Menu>
