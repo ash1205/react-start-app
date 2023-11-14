@@ -1,22 +1,28 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Dropdown, Form, Modal, Row } from "react-bootstrap";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { listOfGenres } from "../../lib/constants";
 
-import calandarIcon from "../../CalendarIcon.png";
 import MyDatePicker from "./MyDatePicker";
 
 function AddMovie() {
   const [show, setShow] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState([]);
-  const [startDate, setStartDate] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    releaseDate: null,
+    movieURL: "",
+    rating: "",
+    runtime: "",
+    overview: "",
+  });
+  const [validated, setValidated] = useState(false);
 
-  const handleDateChange = (date) => {
-    setStartDate(date);
+  const handleClose = () => {
+    setShow(false);
+    setValidated(false);
   };
 
-  const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const handleGenreChange = (genre) => {
@@ -27,37 +33,38 @@ function AddMovie() {
     }
   };
 
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const handleDatePickerChange = (date) => {
+    setFormData({ ...formData, releaseDate: date });
+  };
+
   const addMovie = () => {
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+    const form = document.getElementById("movieForm");
+    if (form.checkValidity() === false) {
+      setValidated(true);
+      return;
+    }
 
-    const raw = JSON.stringify({
-      title: "La La Land",
-      tagline: "Here's to the fools who dream.",
-      vote_average: 7.9,
-      vote_count: 6782,
-      release_date: "2016-12-29",
-      poster_path:
-        "https://image.tmdb.org/t/p/w500/ylXCdC106IKiarftHkcacasaAcb.jpg",
-      overview:
-        "Mia, an aspiring actress, serves lattes to movie stars in between auditions and Sebastian, a jazz musician, scrapes by playing cocktail party gigs in dingy bars, but as success mounts they are faced with decisions that begin to fray the fragile fabric of their love affair, and the dreams they worked so hard to maintain in each other threaten to rip them apart.",
-      budget: 30000000,
-      revenue: 445435700,
-      runtime: 128,
-      genres: ["Comedy", "Drama", "Romance"],
-    });
-
+    // Replace the following with your actual fetch logic
     const requestOptions = {
       method: "POST",
-      headers: myHeaders,
-      body: raw,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
       redirect: "follow",
     };
 
-    fetch("http://localhost:4000/movies", requestOptions)
+    fetch(`${process.env.REACT_APP_API_URL}/movies`, requestOptions)
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
+
+    handleClose();
   };
 
   return (
@@ -89,42 +96,78 @@ function AddMovie() {
             color: "#F65261",
           }}
         >
-          <Form>
+          <Form
+            id="movieForm"
+            noValidate
+            validated={validated}
+            onSubmit={(e) => e.preventDefault()}
+          >
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formMovieTitle">
+                <Form.Group className="mb-3" controlId="title">
                   <Form.Label>TITLE</Form.Label>
-                  <Form.Control placeholder="Tile" />
+                  <Form.Control
+                    type="text"
+                    placeholder="Title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie title.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formMovieReleaseDate">
+                <Form.Group className="mb-3" controlId="releaseDate">
                   <Form.Label>RELEASE DATE</Form.Label>
                   <div style={{ position: "relative", width: "200px" }}>
                     <MyDatePicker
-                      style={{ position: "relative", width: "500px" }}
-                    ></MyDatePicker>
+                      selectedDate={formData.releaseDate}
+                      onChange={handleDatePickerChange}
+                    />
                   </div>
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie release date.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formMovieURL">
+                <Form.Group className="mb-3" controlId="movieURL">
                   <Form.Label>MOVIE URL</Form.Label>
-                  <Form.Control placeholder="https://" />
+                  <Form.Control
+                    type="url"
+                    placeholder="https://"
+                    value={formData.movieURL}
+                    onChange={handleChange}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie URL.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formMovieRating">
+                <Form.Group className="mb-3" controlId="rating">
                   <Form.Label>RATING</Form.Label>
-                  <Form.Control placeholder="7.8" />
+                  <Form.Control
+                    type="number"
+                    placeholder="7.8"
+                    value={formData.rating}
+                    onChange={handleChange}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie rating.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col xs={7}>
-                <Form.Group className="mb-3" controlId="formMovieGenres">
+                <Form.Group className="mb-3" controlId="genres">
                   <Form.Label>GENRE</Form.Label>
                   <Dropdown>
                     <Dropdown.Toggle
@@ -161,24 +204,42 @@ function AddMovie() {
                       ))}
                     </Dropdown.Menu>
                   </Dropdown>
+                  <Form.Control.Feedback type="invalid">
+                    Please select at least one movie genre.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
               <Col>
-                <Form.Group className="mb-3" controlId="formMovieRunTime">
+                <Form.Group className="mb-3" controlId="runtime">
                   <Form.Label>RUNTIME</Form.Label>
-                  <Form.Control placeholder="minutes" />
+                  <Form.Control
+                    type="number"
+                    placeholder="minutes"
+                    value={formData.runtime}
+                    onChange={handleChange}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie runtime.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Group className="mb-3" controlId="formMovieOverview">
+                <Form.Group className="mb-3" controlId="overview">
                   <Form.Label>OVERVIEW</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={5}
                     placeholder="Movie description"
+                    value={formData.overview}
+                    onChange={handleChange}
+                    required
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Please provide a movie overview.
+                  </Form.Control.Feedback>
                 </Form.Group>
               </Col>
             </Row>

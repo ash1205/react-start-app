@@ -1,19 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import calandarIcon from "../../CalendarIcon.png";
 
-const MyDatePicker = () => {
-  const [startDate, setStartDate] = useState(null);
-  const [calendarOpen, setCalendarOpen] = useState(false);
+const MyDatePicker = ({ selectedDate, onChange }) => {
+  const [startDate, setStartDate] = useState(selectedDate);
+
+  useEffect(() => {
+    // Update local state if the selectedDate prop changes
+    setStartDate(selectedDate);
+  }, [selectedDate]);
 
   const handleDateChange = (date) => {
     setStartDate(date);
-  };
-
-  const openCalendar = () => {
-    setCalendarOpen(true);
+    onChange(date); // Notify parent component about the date change
   };
 
   return (
