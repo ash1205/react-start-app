@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GenreSelect Component renders correctly 1`] = `
+<div>
+  <div>
+    <div
+      class="btn-group"
+      role="group"
+    >
+      <input
+        autocomplete="off"
+        class="btn-check"
+        id="genre-0"
+        name="genre"
+        type="radio"
+        value="Action"
+      />
+      <label
+        class="btn btn-primary"
+        for="genre-0"
+        tabindex="0"
+      >
+        Action
+      </label>
+      <input
+        autocomplete="off"
+        class="btn-check"
+        id="genre-1"
+        name="genre"
+        type="radio"
+        value="Comedy"
+      />
+      <label
+        class="btn btn-success"
+        for="genre-1"
+        tabindex="0"
+      >
+        Comedy
+      </label>
+    </div>
+  </div>
+</div>
+`;

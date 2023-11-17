@@ -10,7 +10,7 @@ function AddMovie() {
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
-    releaseDate: null,
+    releaseDate: "",
     movieURL: "",
     rating: "",
     runtime: "",
@@ -38,10 +38,6 @@ function AddMovie() {
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleDatePickerChange = (date) => {
-    setFormData({ ...formData, releaseDate: date });
-  };
-
   const addMovie = () => {
     const form = document.getElementById("movieForm");
     if (form.checkValidity() === false) {
@@ -49,7 +45,6 @@ function AddMovie() {
       return;
     }
 
-    // Replace the following with your actual fetch logic
     const requestOptions = {
       method: "POST",
       headers: {
@@ -123,9 +118,10 @@ function AddMovie() {
                   <Form.Label>RELEASE DATE</Form.Label>
                   <div style={{ position: "relative", width: "200px" }}>
                     <MyDatePicker
-                      selectedDate={formData.releaseDate}
-                      onChange={handleDatePickerChange}
-                    />
+                      onChange={(date) =>
+                        setFormData({ ...formData, releaseDate: date })
+                      }
+                    ></MyDatePicker>
                   </div>
                   <Form.Control.Feedback type="invalid">
                     Please provide a movie release date.
